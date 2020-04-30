@@ -1,0 +1,76 @@
+CREATE TABLE `t_user` (
+  `USR_ID` bigint NOT NULL AUTO_INCREMENT,
+  `CREATED_AT` datetime NOT NULL,
+  `UPDATED_AT` datetime NOT NULL,
+  `USR_ACCOUNT_NON_EXPIRED` bit(1) DEFAULT b'1',
+  `USR_ACCOUNT_NOT_LOCKED` bit(1) DEFAULT b'1',
+  `USR_CREDENTIALS_NON_EXPIRED` bit(1) DEFAULT b'1',
+  `USR_EMAIL` varchar(100) NOT NULL,
+  `USR_ENABLED` bit(1) DEFAULT b'1',
+  `USR_FIRST_NAME` varchar(30) DEFAULT NULL,
+  `USR_LAST_NAME` varchar(30) DEFAULT NULL,
+  `USR_PASSWORD` varchar(255) NOT NULL,
+  `USR_USERNAME` varchar(30) NOT NULL,
+  PRIMARY KEY (`USR_ID`),
+  UNIQUE KEY `UK_i1lm05r13mjsfi0cdn9q5y1qh` (`USR_EMAIL`),
+  UNIQUE KEY `UK_h73iqyf4stp2gw3fskv90g3ba` (`USR_USERNAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `t_role` (
+  `ROL_ID` bigint NOT NULL AUTO_INCREMENT,
+  `ROL_NAME` varchar(30) NOT NULL,
+  PRIMARY KEY (`ROL_ID`),
+  UNIQUE KEY `UK_4pwl3c4kt2uij6iwpwi5m705m` (`ROL_NAME`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `t_authority` (
+  `AUT_ID` bigint NOT NULL AUTO_INCREMENT,
+  `AUT_NAME` varchar(30) NOT NULL,
+  PRIMARY KEY (`AUT_ID`),
+  UNIQUE KEY `UK_d7whq7bohope081q7l3drlv0w` (`AUT_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `jt_user_role` (
+  `USR_ID` bigint NOT NULL,
+  `ROL_ID` bigint NOT NULL,
+  UNIQUE KEY `UKsefuiilhgb8n04tgyo01nixm4` (`USR_ID`,`ROL_ID`),
+  KEY `FKqjup32mrfkhd60r9crs3pfsye` (`ROL_ID`),
+  CONSTRAINT `FK6r66h2t2ih4xe4jh8tsbx1ruy` FOREIGN KEY (`USR_ID`) REFERENCES `t_user` (`USR_ID`),
+  CONSTRAINT `FKqjup32mrfkhd60r9crs3pfsye` FOREIGN KEY (`ROL_ID`) REFERENCES `t_role` (`ROL_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `jt_role_authority` (
+  `ROL_ID` bigint NOT NULL,
+  `AUT_ID` bigint NOT NULL,
+  UNIQUE KEY `UKksiliybn84grfu1p6dlcati42` (`ROL_ID`,`AUT_ID`),
+  KEY `FKrjj681rjvg96iynxk0g5n4vrh` (`AUT_ID`),
+  CONSTRAINT `FKnydr0gjjgwnbmjkrfvbej3cgi` FOREIGN KEY (`ROL_ID`) REFERENCES `t_role` (`ROL_ID`),
+  CONSTRAINT `FKrjj681rjvg96iynxk0g5n4vrh` FOREIGN KEY (`AUT_ID`) REFERENCES `t_authority` (`AUT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `t_category` (
+  `CAT_ID` bigint NOT NULL AUTO_INCREMENT,
+  `CAT_NAME` varchar(50) NOT NULL,
+  PRIMARY KEY (`CAT_ID`),
+  UNIQUE KEY `UK_9lm18e5d1qmrvf4yp28cfcyck` (`CAT_NAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `t_place` (
+  `PLA_ID` bigint NOT NULL AUTO_INCREMENT,
+  `PLA_DESCRIPTION` varchar(250) DEFAULT NULL,
+  `PLA_NAME` varchar(100) NOT NULL,
+  `PLA_ADDRESS` varchar(250) NOT NULL,
+  `PLA_CATEGORY_ID` bigint NOT NULL,
+  PRIMARY KEY (`PLA_ID`),
+  KEY `FKcyg8gsqd77amuq48s1rpkkv2i` (`PLA_CATEGORY_ID`),
+  CONSTRAINT `FKcyg8gsqd77amuq48s1rpkkv2i` FOREIGN KEY (`PLA_CATEGORY_ID`) REFERENCES `t_category` (`CAT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
+
+CREATE TABLE `post` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `user_USR_ID` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK5w76jfc3d9bduo7jhoq4e69ei` (`user_USR_ID`),
+  CONSTRAINT `FK5w76jfc3d9bduo7jhoq4e69ei` FOREIGN KEY (`user_USR_ID`) REFERENCES `t_user` (`USR_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;

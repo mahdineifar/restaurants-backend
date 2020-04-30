@@ -1,9 +1,9 @@
 type User {
 id: ID!,
-firstName: String,
-lastName: String,
+username: String,
 email: String,
-posts: [Post]
+posts: [Post],
+ roles: [Role]
 }
 
 type Query {
@@ -12,11 +12,15 @@ user(id: ID):User
 }
 
 type Mutation {
-createUser(user: UserInput):User
+ registerUser(user: UserInput):User
 }
 
 input UserInput {
-firstName: String!,
-lastName: String!,
- email: String!
+username: String!,
+password: String!,
+email: String!
+}
+
+type Role {
+ name: String
 }
